@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine 🖤</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #2a0a18, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+.box {
+    background: rgba(20,10,15,0.95);
+    width: 420px;
+    max-width: 90%;
+    padding: 28px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,80,150,0.5);
+    color: #ff7aa8;
+}
+
+h1 {
+    color: #ff6fa5;
+    text-shadow: 0 0 12px rgba(255,100,160,0.8);
+}
+
+p {
+    color: #ffd1e0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    background: linear-gradient(45deg,#ff2f6f,#ff8fb3);
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(255,0,120,0.6);
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.countdown {
+    font-size: 60px;
+    font-weight: bold;
+    color: #ff6fa5;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 22px;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-800px); opacity: 0; }
+}
+
+.final-img {
+    width: 100%;
+    border-radius: 20px;
+    margin: 15px 0;
+    box-shadow: 0 0 25px rgba(255,100,150,0.6);
+    animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Music (plays after YES) -->
+<audio id="loveSong">
+    <source src="kadhaipoma.mp3" type="audio/mpeg">
+</audio>
+
+<div class="box" id="box"></div>
+
+<script>
+let questions = [
+    {
+        text: "Who has more love in this relationship?",
+        options: ["YOU", "ME (THE BABY)", "Both 🖤"],
+        correct: 1
+    },
+    {
+        text: "Will you show me the whole world while travelling together?",
+        options: ["Yes my GF 🖤", "No 💔(if you click this you are considered to be as a gay:)"],
+        correct: 0,warning:"If you dont, I'll roam with My future Mom in Law" 
+    },
+    {
+        text: "Endless love, surprises & panipuri for life?",
+        options: ["Pandrenunga Ammuni 🖤", "No sorry 🖤(isssok No issues babes ill correct some architecture boy in my clg for em)"],
+        correct: 0
+    },
+    {
+        text: "Will you be my Valentine, My Sashuu? 🍮🥰",
+        options: ["Yes 🖤", "No 💔"],
+        correct: 0
+    }
+];
+
+let current = -1;
+const box = document.getElementById("box");
+
+showGate();
+
+function showGate(){
+    box.innerHTML = `
+        <h1>Babes 🖤</h1>
+        <p>Enter only if your heart is full of love…</p>
+        <button onclick="enter(true)">Yes 🖤</button>
+        <button onclick="enter(false)">No 💔</button>
+    `;
+}
+
+function enter(ok){
+    if(ok){
+        current = 0;
+        showQuestion();
+    } else {
+        showGate();
+    }
+}
+
+function showQuestion(){
+    let q = questions[current];
+    let html = `<h1>Question ${current+1}</h1><p>${q.text}</p>`;
+
+    q.options.forEach((o,i)=>{
+        html += `<button onclick="answer(${i})">${o}</button>`;
+    });
+
+    box.innerHTML = html;
+}
+
+function answer(i){
+    let q = questions[current];
+
+    if(i === q.correct){
+        if(current === questions.length - 2){
+            readyCountdown();
+            return;
+        }
+        if(current === questions.length - 1){
+            finalPage();
+            return;
+        }
+        current++;
+        showQuestion();
+    } else {
+        showHeartbreak();
+    }
+}
+
+function readyCountdown(){
+    let count = 3;
+    box.innerHTML = `
+        <p>One last question… 🖤</p>
+        <div class="countdown" id="cd">3</div>
+    `;
+    let cd = document.getElementById("cd");
+
+    let timer = setInterval(()=>{
+        count--;
+        if(count === 0){
+            clearInterval(timer);
+            current++;
+            showQuestion();
+        } else {
+            cd.textContent = count;
+        }
+    },1000);
+}
+
+function showHeartbreak(){
+    box.innerHTML = `
+        <h1>🥺 Adooo</h1>
+        <p>That hurt a little… try again pattootii?</p>
+        <button onclick="showQuestion()">Retry 🖤</button>
+    `;
+}
+
+function finalPage(){
+    box.innerHTML = `
+        <img src="photo.png" class="final-img" alt="Us">
+
+        <p>
+            You just said <b>YES</b> 🥺🖤<br>
+            From now on…<br>
+            you’re my Valentine,<br>
+            my Rasamalai forever 🍮🤍
+        </p>
+    `;
+
+    const song = document.getElementById("loveSong");
+    song.currentTime = 0;
+    song.play();
+
+    setInterval(makeHeart, 250);
+}
+
+function makeHeart(){
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "🖤";
+    h.style.left = Math.random()*100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+</script>
+
+</body>
+</html>
